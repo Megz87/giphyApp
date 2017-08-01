@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>GiphyApp</title>
+	<link rel="stylesheet" type="text/css">
+</head>
+<body>
+		<!--container-->
+	<div id = "food-view">
+		
+										
+			<button data-food="hamburger">
+			Hamburger
+			</button>
+
+			<button data-food="cheese">
+			Cheese
+			</button>
+
+			<button data-food="pizza">
+			pizza
+			</button>	
+			<br>
+			<br>
+			<br>
+			
+			<form id="food-form">
+				<label for="food-input">Add One Food Item</label>
+				<input type="text" id="food-input"><br>
+				<input id="addFood" type="submit" value="Submit">   
+			</form>
+
+			
+			<div id="food-appears-here">
+			</div>
+
+	</div>
+
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			//create array
+			
+			var foodArray = ["hamburgers", "cheese", "pizza", "candy", "hotdogs", "bread", "gelato", "soda", "ketchup", "salads"];
+				
+			//create function to iterate through the array and create a button for each item within the array
+				
+
+				var foodDiv = document.getElementById("food-view");
+					$("food-view").empty();
+					for (var i = 0; i < foodArray.length; i++) {
+							//console.log(foodArray[i]);
+							
+
+					}
+
+			 $("#addFood").on("click", function(event) {
+			 		event.preventDefault();
+			 		var food = $(this).attr("data-food");
+      				var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=afb4daa05d0c409e9d6a1e06b0cab0a2&q=" + food + "&limit=10&offset=0&rating=G&lang=en%20Send%20Request";
+
+        			$.ajax({
+	         		url: queryURL,
+	          		method: "GET"
+	        		})
+	        		.done(function(response) {
+	          		var results = response.data;
+	          		console.log(response);
+
+	          		for (var i = 0; i < results.length; i++) {
+		            	var foodDiv = $("<div class='item'>");
+		            	var rating = results[i].rating; 
+		            	var p = $("<p>").text("Rating: " + rating);
+
+		            var foodImage = $("<img>");
+		            foodImage.attr("src", results[i].images.fixed_height.url);
+
+		            foodDiv.prepend(p);
+		            foodDiv.prepend(foodImage);
+
+		            $("#food-appears-here").prepend(foodDiv);
+          }
+        });
+    });
+
+	
+		</script>
+
+
+	
+</body>
+</html>
